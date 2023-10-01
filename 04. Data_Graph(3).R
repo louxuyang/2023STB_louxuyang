@@ -9,18 +9,18 @@ prop.table(ECN)
 table(X2023_STB_survey $성별, X2023_STB_survey $학년)
 
 #막대그래프
-barplot(table(X2023_STB_survey $국적))
+barplot(table(X2023_STB_survey $국적),ylim=c(0,30))
 
-barplot(table(X2023_STB_survey $주택가),horiz=TRUE)
+barplot(table(X2023_STB_survey $주택가),xlim=c(0,40),horiz=TRUE)
 
 entry <- table(X2023_STB_survey $성별, X2023_STB_survey $학년)
-barplot(entry, legend = TRUE)
+barplot(entry, legend = TRUE,ylim=c(0,30))
 
 #파이차트
 pie(table(X2023_STB_survey $학년))
 
 #히스토그램
-hist(X2023_STB_survey$`연세`, main="2023년 경영통계분석2를 수강하는 수강생들의 연세",col=terrain.colors(12))
+hist(X2023_STB_survey$`연세`,breaks=9, main="2023년 경영통계분석2를 수강하는 수강생들의 연세",col=terrain.colors(12),labels=T,xlab=NULL)
 
 #박스 플롯
 boxplot(X2023_STB_survey$`학년`, X2023_STB_survey$`연세`,main="학년별 연세에 대한 기술통계분석", col="yellow", names =c("학년","연세"))
