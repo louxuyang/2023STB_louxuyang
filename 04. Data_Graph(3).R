@@ -24,6 +24,8 @@ hist(X2023_STB_survey$`연세`,breaks=9, main="2023년 경영통계분석2를 �
 
 #박스 플롯
 boxplot(X2023_STB_survey$`학년`, X2023_STB_survey$`연세`,main="학년별 연세에 대한 기술통계분석", col="yellow", names =c("학년","연세"))
+summary(X2023_STB_survey)
+summary(X2023_STB_survey, na.rm=T)
 
 #삱점도
 plot(x=X2023_STB_survey$`학년`,  y=X2023_STB_survey$`연세`,  xlab="학년", ylab="연세", main="학년와 연세의 변화")
