@@ -10,7 +10,8 @@ library(ggplot2)
 str(subway)
 
 #변수의 이상치와 결측치 확인하고 처리
-summary(subway)\#NA's(결측치)가 미표시됨
+summary(subway)
+#NA's(결측치)가 미표시됨
 
 #분석목적에 따른 파생변수 만들기
 #파생변수1.정수형day변수
@@ -31,7 +32,7 @@ subway$total_passenger <-subway$on_board+subway$getting_off
 #분석데이터 최종 확인
 str(subway)
 
-#데이터분석석
+#데이터분석
 #1.지하철역의 하루 평균승차/하차승객수
 subway%>% 
   summarise(on_m=mean(on_board), off_m=mean(getting_off))
@@ -101,5 +102,3 @@ ggplot(data = line_graph, aes(x=day, y=s, group=1))+
   ggtitle("수도권 지하철 일별 이용승객수")+
   xlab("일")+
   ylab("이용승객")
-
-
