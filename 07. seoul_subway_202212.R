@@ -37,7 +37,7 @@ str(subway)
 subway%>% 
   summarise(on_m=mean(on_board), off_m=mean(getting_off))
 
-#승차승객수가가장많았던역의노선을찾아보기
+#2.승차승객수가가장많았던역의노선을찾아보기
 #2-1.solution
 max(subway$on_board)
 subway%>% 
