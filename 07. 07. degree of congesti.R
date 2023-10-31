@@ -40,10 +40,6 @@ congestion1$day_mean <-
 mean(congestion1$day_mean)
 
 #2.지하철 호선별 하루 평균 혼잡도
-max(congestion1$day_mean)
-congestion1%>% filter(day_mean==60.1)%>%  
-  select(type, line, station,way)
-
 passenger10 <-congestion1 %>%
   group_by(line)%>%
   summarise(m=mean(day_mean))%>%
@@ -197,12 +193,12 @@ congestion1 %>%
   arrange(desc(n))
 
 #6-2.호선별로 18시 지하철 혼잡도 범주화
-congestion1 %>%  
-  mutate(s80_grade=ifelse(s1800<=80, "good", ifelse(s1800<=130, "normal", ifelse(s1800<=150, "caution", "bad"))))%>%
+congestion1 %>% 
+  mutate(s80_grade=ifelse(s1800<=80, "good", ifelse(s1800<=130, "normal", ifelse(s1800<=150, "caution", "bad"))))%>% 
   group_by(line, s80_grade) %>% 
-  summarise(n=n())%>%  
-  mutate(total=sum(n), pct=round(n/total*100,1))%>%  
-  filter(s80_grade=="bad")%>%  
-  select(line, s80_grade,n,pct)%>%  
-  arrange(desc(pct))%>%  
+  summarise(n=n())%>% 
+  mutate(total=sum(n), pct=round(n/total*100,1))%>% 
+  filter(s80_grade=="caution")%>% 
+  select(line, s80_grade,n,pct)%>% 
+  arrange(desc(pct))%>% 
   head(5)
