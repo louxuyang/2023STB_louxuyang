@@ -102,22 +102,10 @@ ggplot(data=passenger10, aes(x=reorder(line, m), y=m))+
   geom_col()+
   coord_flip()
 
-#3-5.지하철 호선별 9시의 평균혼잡도
-passenger10 <-congestion1 %>%
-  group_by(line)%>%
-  summarise(m=mean(s0900))%>%
-  arrange(desc(m))%>%
-  head(8)
-head(passenger10, 8)
-
-ggplot(data=passenger10, aes(x=reorder(line, m), y=m))+
-  geom_col()+
-  coord_flip()
-
-#3-6평균혼잡도 상위 4개 호선의 역별 기여도
+#3-5.상위 4개 호선의 역별 기여도
 congestion1%>%
   group_by(line) %>%  
-  summarise(total=sum(day_mean)) %>%
+  summarise(total=sum(s0700, s0730, s0800, s0830)) %>%
   arrange(desc(total)) %>%
   head(4)
 
@@ -191,22 +179,10 @@ ggplot(data=passenger10, aes(x=reorder(line, m), y=m))+
   geom_col()+
   coord_flip()
 
-#5-5.지하철 호선별 20시의 평균혼잡도
-passenger10 <-congestion1 %>%
-  group_by(line)%>%
-  summarise(m=mean(s2000))%>%
-  arrange(desc(m))%>%
-  head(8)
-head(passenger10, 8)
-
-ggplot(data=passenger10, aes(x=reorder(line, m), y=m))+
-  geom_col()+
-  coord_flip()
-
-#5-6평균혼잡도 상위 4개 호선의 역별 기여도
+#5-5평균혼잡도 상위 4개 호선의 역별 기여도
 congestion1%>%
   group_by(line) %>%  
-  summarise(total=sum(day_mean)) %>%
+  summarise(total=sum(s1800, s1830, s1900, s1930)) %>%
   arrange(desc(total)) %>%
   head(4)
 
