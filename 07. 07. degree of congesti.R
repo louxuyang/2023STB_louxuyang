@@ -198,7 +198,7 @@ congestion1 %>%
 
 #6-2.호선별로 18시 지하철 혼잡도 범주화
 congestion1 %>%  
-  mutate(s80_grade=ifelse(s0800<=80, "good", ifelse(s0800<=130, "normal", ifelse(s0800<=150, "caution", "bad"))))%>%
+  mutate(s80_grade=ifelse(s1800<=80, "good", ifelse(s1800<=130, "normal", ifelse(s1800<=150, "caution", "bad"))))%>%
   group_by(line, s80_grade) %>% 
   summarise(n=n())%>%  
   mutate(total=sum(n), pct=round(n/total*100,1))%>%  
