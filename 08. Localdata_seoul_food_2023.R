@@ -26,7 +26,7 @@ foodshop$close_date <- as.integer(foodshop$close_date)
 #3.변경된 데이터구조 확인
 str(foodshop)
 
-#.파생변수 만들기
+#1.파생변수 만들기
 #영업상태가 영업/폐업이 아닌 것을 제외
 foodshop <- foodshop %>% 
   filter(status == '영업' | status == '폐업') %>%
