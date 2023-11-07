@@ -51,7 +51,7 @@ range(foodshop$close_date, na.rm = T)
 foodshop$close_year<-substr(foodshop$close_date,1,4)#인허가년도 변수 생성
 
 #5.address변수
-foodshop$district<-substr(foodshop$address,5,7)#구 정보를 분리하여 변수 생성
+foodshop$district<-substr(foodshop$address,5,7)#시 정보를 분리하여 변수 생성
 table(foodshop$district)#이상치 확인
 foodshop$district <- ifelse(foodshop$district%in%c("도 제","시 망","시 수","시 영","시 원","시 일"),NA,foodshop$district)#이상치제거
 table(foodshop$district)#이상치 확인
@@ -67,67 +67,67 @@ str(foodshop)
 #데이터분석
 #1.가장 오래 영업 중인 음식점
 foodshop %>%
-  filter(!is.na(open_date)&status=="영업") %>% 
-  filter(open_date==min(open_date)) %>% 
+  filter(!is.na(open_date)&status=="영업") %>% #결측치제거, 영업데이터 추출
+  filter(open_date==min(open_date)) %>% #개업일이 가장 빠른 데이터 추출
   select(name, type, open_date, address)
 
 #2.주요 업종별로 가장 오래 영업중인 음식점
 foodshop %>%
-  filter(!is.na(open_date)&status=="영업") %>% 
-  filter(type%in%c("기타","출장조리","분식","일식","중국식","호프/통닭","횟집"))%>%
-  group_by(type) %>%
-  filter(open_date==min(open_date)) %>% 
+  filter(!is.na(open_date)&status=="영업") %>% #결측치제거, 영업데이터 추출
+  filter(type%in%c("기타","경양식","분식","일식","중국식","호프/통닭"))%>%
+  group_by(type) %>%#업종별 분류
+  filter(open_date==min(open_date)) %>% #개업일이 가장 빠른 데이터 추출
   select(name, type, open_date, address)
 
 #3.업종별 개업 비율
 foodshop %>%
-  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% 
+  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% #결측치제외
   group_by(type) %>%
-  summarise(n=n()) %>% 
-  mutate(total=sum(n),pct=round(n/total*100,1)) %>% 
+  summarise(n=n()) %>% #범주빈도계산
+  mutate(total=sum(n),pct=round(n/total*100,1)) %>% #범주별비율계산
   arrange(desc(n)) %>%
   head(10)
 
 #4.영업 중인 음식점의 업종별 비율
 foodshop %>%
-  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% 
-  filter(status=="영업") %>%
+  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% #결측치제외
+  filter(status=="영업") %>% #영업만 추출
   group_by(type) %>%
   summarise(n=n()) %>% #범주빈도계산
-  mutate(total=sum(n),pct=round(n/total*100,1)) %>%
+  mutate(total=sum(n),pct=round(n/total*100,1)) %>% #범주별비율계산
   arrange(desc(n)) %>%
   head(5)
 
 #5.전체 음식점의 영업과 폐업 비율
 foodshop %>%
-  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% 
+  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% #결측치제외
   group_by(status) %>%
-  summarise(n=n()) %>%
-  mutate(total=sum(n),pct=round(n/total*100,1))
+  summarise(n=n()) %>% #범주빈도계산
+  mutate(total=sum(n),pct=round(n/total*100,1)) #범주별비율계산
 
 #6.주요 업종별 영업과 폐업 비율
 foodshop %>%
-  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% 
-  filter(type%in%c("기타","출장조리","분식","일식","중국식","호프/통닭","횟집"))%>%
-  group_by(type,status) %>%
-  summarise(n=n()) %>% 
-  mutate(total=sum(n),pct=round(n/total*100,1))%>%
-  filter(status=="영업") %>%
+  filter(!is.na(open_date)&!is.na(type)&!is.na(district)) %>% #결측치제외
+  filter(type%in%c("기타","경양식","분식","일식","중국식","호프/통닭"))%>%
+  group_by(type,status) %>%#교차차 분류
+  summarise(n=n()) %>% #범주빈도계산
+  mutate(total=sum(n),pct=round(n/total*100,1))%>% #범주별비율계산
+  filter(status=="영업") %>% #영업만 추출
   arrange(desc(n))
 
 #7.개업이 많았던 연도
 foodshop %>%
-  filter(!is.na(open_date)&!is.na(district))%>% 
+  filter(!is.na(open_date)&!is.na(district))%>% #결측치제외
   group_by(open_year) %>%
-  summarise(n=n()) %>% 
+  summarise(n=n()) %>% #범주빈도계산
   arrange(desc(n)) %>%
   head(5)
 
 #8.폐업이 많았던 연도
 foodshop %>%
-  filter(!is.na(close_date)&!is.na(district))%>%
+  filter(!is.na(close_date)&!is.na(district))%>% #결측치제외
   group_by(close_year) %>%
-  summarise(n=n()) %>% 
+  summarise(n=n()) %>% #범주빈도계산
   arrange(desc(n)) %>%
   head(5)
 
@@ -158,14 +158,14 @@ ggplot(data=close_trend,aes(x=close_year,y=close_n))+
   xlab("연도") + ylab("폐업수")
 
 #11.개업과 폐업 음식점 통합 그래프
-open_trend1<-rename(open_trend,year=open_year)
-close_trend1<-rename(close_trend,year=close_year)
+open_trend1<-rename(open_trend,year=open_year)#연도이름 변경
+close_trend1<-rename(close_trend,year=close_year)#연도이름 변경
 
-open_close_trend<-left_join(open_trend1,close_trend1,by="year")
+open_close_trend<-left_join(open_trend1,close_trend1,by="year")#통합
 
 ggplot()+
-  geom_line(data=open_close_trend, aes(year,open_n))+
-  geom_line(data=open_close_trend, aes(year,close_n,color="red"))+
+  geom_line(data=open_close_trend, aes(year,open_n))+#개업그래프
+  geom_line(data=open_close_trend, aes(year,close_n,color="red"))+#폐업그래프
   xlab("연도") + ylab("개수")
 
 #12.폐업음식점수가 개업음식점수보다 많았던 기간 확인
@@ -174,7 +174,7 @@ open_close_trend %>%
 
 #13.영업중인 음식점수가 가장 많은 5개 구
 district_business<-foodshop %>%
-  filter(!is.na(open_date)&!is.na(district)&status=="영업") %>%
+  filter(!is.na(open_date)&!is.na(district)&status=="영업") %>% #결측치제거
   group_by(district) %>%
   summarise(n=n())
 
@@ -185,17 +185,17 @@ district_business %>%
 #14,25개 구의 음식점수 막대그래프
 ggplot(data = district_business, aes(x=reorder(district,n),y=n))+
   geom_col()+
-  coord_flip()+
+  coord_flip()+#막대 90도회전
   xlab("영업구")+
   ylab("영업 음식점 수")
 
 #15.주요 업종별로 영업하는 음식점이 많은 구
 foodshop %>%
-  filter(!is.na(open_date)&!is.na(district)) %>% 
-  filter(type%in%c("기타","출장조리","분식","일식","중국식","호프/통닭","횟집"))%>%
-  filter(status=="영업") %>% 
+  filter(!is.na(open_date)&!is.na(district)) %>% #결측치제거
+  filter(type%in%c("기타","경양식","분식","일식","중국식","호프/통닭"))%>%
+  filter(status=="영업") %>% #영업만 추출
   group_by(type,district) %>%
   summarise(n=n()) %>%
-  mutate(total=sum(n),pct=round(n/total*100,1))%>% 
+  mutate(total=sum(n),pct=round(n/total*100,1))%>% #범주별비율계산
   group_by(type) %>%
-  filter(pct==max(pct))
+  filter(pct==max(pct))#type별 district비율이 가장 높은 데이터 추출
