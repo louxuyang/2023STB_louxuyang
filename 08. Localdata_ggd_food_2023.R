@@ -51,9 +51,9 @@ range(foodshop$close_date, na.rm = T)
 foodshop$close_year<-substr(foodshop$close_date,1,4)#인허가년도 변수 생성
 
 #5.address변수
-foodshop$district<-substr(foodshop$address,5,7)#시 정보를 분리하여 변수 생성
+foodshop$district<-substr(foodshop$address,4,8)#시 정보를 분리하여 변수 생성
 table(foodshop$district)#이상치 확인
-foodshop$district <- ifelse(foodshop$district%in%c("도 제","시 망","시 수","시 영","시 원","시 일"),NA,foodshop$district)#이상치제거
+foodshop$district <- ifelse(foodshop$district%in%c(",106호","6번지","도 밀양시","도 영암군","별시 강남","별시 관악","별시 노원","별시 마포","별시 용산","별시 은평","역시 계양","역시 남동","역시 미추","역시 서구","별시 금천","사회"),NA,foodshop$district)#이상치제거
 table(foodshop$district)#이상치 확인
 
 #결측치 없음
@@ -181,7 +181,7 @@ ggplot()+
 open_close_trend %>%
   filter(close_n>open_n)
 
-#13.영업중인 음식점수가 가장 많은 5개 구
+#13.영업중인 음식점수가 가장 많은 5개 시
 district_business<-foodshop %>%
   filter(!is.na(open_date)&!is.na(district)&status=="영업") %>% #결측치제거
   group_by(district) %>%
@@ -191,14 +191,14 @@ district_business %>%
   arrange(desc(n)) %>%
   head(5)
 
-#14,25개 구의 음식점수 막대그래프
+#14,25개 시의 음식점수 막대그래프
 ggplot(data = district_business, aes(x=reorder(district,n),y=n))+
   geom_col()+
   coord_flip()+#막대 90도회전
-  xlab("영업구")+
+  xlab("영업시")+
   ylab("영업 음식점 수")
 
-#15.주요 업종별로 영업하는 음식점이 많은 구
+#15.주요 업종별로 영업하는 음식점이 많은 시
 foodshop %>%
   filter(!is.na(open_date)&!is.na(district)) %>% #결측치제거
   filter(type%in%c("기타","경양식","분식","일식","중국식","호프/통닭"))%>%
