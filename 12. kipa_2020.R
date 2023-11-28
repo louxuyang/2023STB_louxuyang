@@ -98,10 +98,6 @@ mental%>%
 RA <-lm(data=mental, suicide~satisfaction+loneliness)
 summary(RA)
 
-install.packages("car")
-library(car)
-vif(RA)
-
 #.상관분석:삶의 만족도와 외로움의 상관관계
 cor.test(mental$satisfaction,mental$loneliness)
 
@@ -112,14 +108,12 @@ RA <-lm(data=mental, satisfaction~family_belief+wealth+health)
 summary(RA)
 options(ztable.type="viewer")
 ztable(RA)
-vif(RA)
 
 #.회귀분석:가족신뢰도, 경제안정도, 건강상태가 외로움에 미치는 영향
 RA <-lm(data=mental, loneliness~family_belief+wealth+health)
 summary(RA)
 options(ztable.type="viewer")
 ztable(RA)
-vif(RA)
 
 #.독립표본t검정:성별 삶의 만족도 차이
 t.test(data=mental, satisfaction~sex)
@@ -131,7 +125,6 @@ mental%>%
   arrange(desc(m))
 
 install.packages("ggplot2")
-
 #.지역별 삶의 만족도 분석과 그래프 작성
 area_satisfaction <-mental%>%
   group_by(area) %>%
